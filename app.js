@@ -9,7 +9,7 @@ const { result, get } = require('lodash');
 const app = express();
 
 // connect to db
-const dbURI = 'mongodb+srv://savicn209:!Nikolasavic61@cluster0.fkjsunt.mongodb.net/node-js-db?retryWrites=true&w=majority';
+const dbURI = 'mongodb+srv://savicn209:<password>@cluster0.fkjsunt.mongodb.net/node-js-db?retryWrites=true&w=majority';
 mongoose.connect(dbURI)
     .then((result) => app.listen(3000))
     .catch((err) => console.log(err));
