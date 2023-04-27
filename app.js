@@ -1,8 +1,9 @@
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-const Blog = require('./models/blog');
 const { result, get } = require('lodash');
+const blogRoutes = require('./routes/blogRoutes')
+const { render } = require('ejs');
 
 // express app
 
@@ -21,26 +22,27 @@ app.set('view engine', 'ejs');
 // middleware & static files
 
 app.use(express.static('public'));
-
+//for accepting form data
+app.use(express.urlencoded({extended: true}))
 app.use(morgan('dev'));
 
 // mongoose and mongo sandob routes
 
-// app.get('/add-blog', (req, res) => {
-//     const blog = new Blog({
-//         title: 'new blog 2',
-//         snippet: 'about my new blog 2',
-//         body: 'more about my blog 2'
-//     });
+app.get('/add-blog', (req, res) => {
+    const blog = new Blog({
+        title: 'new blog 2',
+        snippet: 'about my new blog 2',
+        body: 'more about my blog 2'
+    });
 
-//     blog.save()
-//     .then((result) => {
-//         res.send(result)
-//     })
-//     .catch((err) => {
-//         console.log(err);
-//     });
-// });
+    blog.save()
+    .then((result) => {
+        res.send(result)
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+});
 
 // app.get('/all-blogs', (req, res) => {
 //     Blog.find()
@@ -72,21 +74,7 @@ app.get('/about', (req, res) => {
 
 });
 
-// blog routes
-
-app.get('/blogs', (req, res) => {
-    Blog.find().sort({createdAt: -1})
-        .then((result) => {
-            res.render('index', {title: 'all Blogs', blogs: result})
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-});
-
-app.get('/blogs/create', (req, res) => {
-    res.render('create', {title: 'Create a new Blog' });
-});
+app.use('/blogs', blogRoutes);
 
 // 404 page
 
